@@ -1,4 +1,4 @@
-package com.order.management.demo.repository;
+package com.order.management.demo.repository.user;
 
 import com.order.management.demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
