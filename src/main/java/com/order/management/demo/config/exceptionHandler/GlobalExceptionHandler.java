@@ -15,7 +15,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
     private ResponseEntity<ApiErrorResponse> buildErrorResponse(HttpStatus status, String message, Map<String, String> errors) {
         ApiErrorResponse apiError = ApiErrorResponse.builder()
                 .statusCode(status.value())
@@ -37,12 +36,10 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, "Erro de validação", errors);
     }
 
-
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), null);
     }
-
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
@@ -55,12 +52,10 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, "Email ou senha inválidos", null);
     }
 
-
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiErrorResponse> handleAccessDenied(AccessDeniedException ex) {
-        return buildErrorResponse(HttpStatus.FORBIDDEN, "Acesso negado", null);
+        return buildErrorResponse(HttpStatus.FORBIDDEN, "Você não possui permissão para realizar esta ação.", null);
     }
-
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex) {

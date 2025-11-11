@@ -17,7 +17,7 @@ import java.util.Set;
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY) // LAZY é bom para performance
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
