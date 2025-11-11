@@ -4,7 +4,7 @@ import com.order.management.demo.config.exceptionHandler.ResourceNotFoundExcepti
 import com.order.management.demo.dto.user.UserDTO;
 import com.order.management.demo.model.Enum.Role;
 import com.order.management.demo.model.User;
-import com.order.management.demo.repository.UserRepository;
+import com.order.management.demo.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;

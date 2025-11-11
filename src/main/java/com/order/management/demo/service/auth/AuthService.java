@@ -6,7 +6,7 @@ import com.order.management.demo.dto.auth.LoginRequest;
 import com.order.management.demo.dto.user.UserDTO;
 import com.order.management.demo.model.Enum.Role;
 import com.order.management.demo.model.User;
-import com.order.management.demo.repository.UserRepository;
+import com.order.management.demo.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
