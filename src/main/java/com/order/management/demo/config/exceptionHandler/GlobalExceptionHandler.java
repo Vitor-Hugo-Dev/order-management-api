@@ -46,7 +46,6 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), null);
     }
 
-
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiErrorResponse> handleBadCredentials(BadCredentialsException ex) {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, "Email ou senha inválidos", null);
