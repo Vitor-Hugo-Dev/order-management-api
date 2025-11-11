@@ -1,6 +1,6 @@
 package com.order.management.demo.config;
 
-import com.order.management.demo.repository.UserRepository;
+import com.order.management.demo.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
