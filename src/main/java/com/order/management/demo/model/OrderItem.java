@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 public class OrderItem extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 

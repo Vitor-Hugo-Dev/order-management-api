@@ -29,10 +29,13 @@ public class Order extends BaseEntity {
     private BigDecimal totalAmount;
 
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<OrderItem> items = new HashSet<>();
 
     public void addItem(OrderItem item) {
-        items.add(item);
+        this.items.add(item);
+        item.setOrder(this);
     }
 }

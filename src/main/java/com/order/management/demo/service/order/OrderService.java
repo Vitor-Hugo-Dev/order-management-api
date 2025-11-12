@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,12 +42,14 @@ public class OrderService {
                 .status(OrderStatus.PENDING)
                 .build();
 
-        BigDecimal totalAmount = BigDecimal.ZERO;
+        BigDecimal totalAmount = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
 
         for (CreateOrderItemRequestDTO itemRequest : request.getItems()) {
             Product product = productService.getProductEntityById(itemRequest.getProductId());
 
             BigDecimal price = product.getPrice();
+
+            BigDecimal subtotal = price.multiply(itemRequest.getQuantity()).setScale(2, RoundingMode.HALF_UP);
 
             OrderItem orderItem = OrderItem.builder()
                     .product(product)
@@ -56,7 +59,7 @@ public class OrderService {
 
             newOrder.addItem(orderItem);
 
-            totalAmount = totalAmount.add(price.multiply(itemRequest.getQuantity()));
+            totalAmount = totalAmount.add(subtotal);
         }
 
         newOrder.setTotalAmount(totalAmount);
