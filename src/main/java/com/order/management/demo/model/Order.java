@@ -1,6 +1,6 @@
 package com.order.management.demo.model;
 
-import com.order.management.demo.model.Enum.OrderStatus;
+import com.order.management.demo.model.enuns.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,5 +32,7 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<OrderItem> items = new HashSet<>();
 
-
+    public void addItem(OrderItem item) {
+        items.add(item);
+    }
 }

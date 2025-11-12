@@ -2,8 +2,8 @@ package com.order.management.demo.service.user;
 
 import com.order.management.demo.config.exceptionHandler.ResourceNotFoundException;
 import com.order.management.demo.dto.user.UserDTO;
-import com.order.management.demo.model.Enum.Role;
 import com.order.management.demo.model.User;
+import com.order.management.demo.model.enuns.Role;
 import com.order.management.demo.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;

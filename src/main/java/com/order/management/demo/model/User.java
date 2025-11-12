@@ -1,6 +1,6 @@
 package com.order.management.demo.model;
 
-import com.order.management.demo.model.Enum.Role;
+import com.order.management.demo.model.enuns.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

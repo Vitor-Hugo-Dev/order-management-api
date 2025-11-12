@@ -1,7 +1,7 @@
 package com.order.management.demo.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.order.management.demo.model.Enum.Role;
+import com.order.management.demo.model.enuns.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

@@ -1,6 +1,7 @@
 package com.order.management.demo.service.product;
 
 
+import com.order.management.demo.config.exceptionHandler.InsufficientStockException;
 import com.order.management.demo.config.exceptionHandler.ResourceNotFoundException;
 import com.order.management.demo.dto.product.ProductRequestDTO;
 import com.order.management.demo.dto.product.ProductResponseDTO;
@@ -53,6 +54,12 @@ public class ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Produto", "id", id));
     }
 
+    @Transactional(readOnly = true)
+    public Product getProductEntityById(UUID id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto", "id", id));
+    }
+
     @Transactional
     public ProductResponseDTO createProduct(ProductRequestDTO request) {
         Product product = Product.builder()
@@ -87,5 +94,35 @@ public class ProductService {
         }
 
         productRepository.deleteById(id);
+    }
+
+    public Product findByIdForUpdate(UUID id) {
+        return productRepository.findByIdForUpdate(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto", "id", id));
+    }
+
+    @Transactional
+    public void debitStockAndLock(UUID productId, BigDecimal quantityToDebit) {
+        Product product = productRepository.findByIdForUpdate(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto", "id", productId));
+
+        if (product.getStock().compareTo(quantityToDebit) < 0) {
+            throw new InsufficientStockException("Estoque insuficiente para " + product.getName() +
+                    ". Disponível: " + product.getStock());
+        }
+
+        product.setStock(product.getStock().subtract(quantityToDebit));
+
+        productRepository.save(product);
+    }
+
+    @Transactional
+    public void restockItemAndLock(UUID productId, BigDecimal quantityToAdd) {
+        Product product = productRepository.findByIdForUpdate(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto", "id", productId));
+
+        product.setStock(product.getStock().add(quantityToAdd));
+
+        productRepository.save(product);
     }
 }
