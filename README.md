@@ -73,10 +73,13 @@ Para atender aos requisitos, a seguinte stack e arquitetura foram implementadas:
 
 ## 4\. Como Executar (Com Docker)
 
-Este é o método mais simples e recomendado.
+Você pode rodar o projeto de duas formas principais:
 
-### 1\. Crie o arquivo `.env`
+### Modo 1: Aplicação Completa (Docker)
 
+Este é o método mais simples para rodar o projeto completo como ele foi desenhado para produção.
+
+**1. Crie o arquivo `.env`**
 O `docker-compose.yml` espera um arquivo `.env` para injetar o segredo do JWT. Crie um arquivo chamado `.env` na raiz do
 projeto (ele já está no `.gitignore`).
 
@@ -88,21 +91,51 @@ touch .env
 echo "JWT_SECRET=bXlWZXJ5U2VjdXJlU2VjcmV0S2V5Rm9ySldUU2lnbmluZ1RoYXRJc0xvbmc=" > .env
 ```
 
-### 2\. Suba os Contêineres
-
+**2. Suba os Contêineres**
 Na raiz do projeto, execute:
 
 ```bash
 docker-compose up --build
 ```
 
-A aplicação `ecommerce-app` irá pausar e aguardar o `ecommerce-db` ficar "healthy" (o que pode levar de 15 a 30
-segundos). Após o banco estar pronto, a aplicação Spring Boot iniciará, o Flyway executará as migrações (V1 a V7), e o
-servidor estará pronto.
+A aplicação `ecommerce-app` irá pausar e aguardar o `ecommerce-db` ficar "healthy". Após o banco estar pronto, a
+aplicação Spring Boot iniciará, o Flyway executará as migrações (V1 a V7), e o servidor estará pronto.
 
 A API estará disponível em: `http://localhost:8080`
 
-### 3\. Dump do Banco de Dados
+### Modo 2: Apenas o Banco (Desenvolvimento Híbrido)
+
+Este é o método ideal para desenvolvimento local, onde você roda a **aplicação pela sua IDE (IntelliJ)** e conecta ao *
+*banco de dados no Docker**.
+
+**1. Suba apenas o contêiner do banco:**
+Execute o seguinte comando na raiz do projeto:
+
+```bash
+docker-compose up -d db
+```
+
+* `docker-compose up`: Inicia os serviços.
+* `-d`: Modo "detached" (roda em segundo plano).
+* `db`: É o nome do serviço do banco de dados definido no `docker-compose.yml`.
+
+**2. Verifique seu `application.yml`:**
+O seu `application.yml` já está configurado para `localhost`:
+
+```yml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecommerce_db?useSSL=false&allowPublicKeyRetrieval=true
+```
+
+**3. Rode a Aplicação na IDE:**
+Como o `docker-compose.yml` mapeia a porta do banco (`ports: - "3306:3306"`), sua aplicação rodando no IntelliJ (
+em `localhost`) conseguirá se conectar perfeitamente ao banco rodando no Docker (em `localhost:3306`). O Flyway será
+executado pela aplicação no IntelliJ.
+
+-----
+
+## 5\. Dump do Banco de Dados
 
 O requisito de "dump do banco" é atendido pelo **Flyway**. As migrações na pasta `src/main/resources/db/migration` criam
 todo o schema do zero (V1-V3, V5) e populam o banco com um conjunto rico de dados de teste (V4, V6, V7). Não é
@@ -110,7 +143,7 @@ necessário um `dump.sql` manual.
 
 -----
 
-## 5\. Testando com Postman
+## 6\. Testando com Postman
 
 Na raiz do projeto, você encontrará o arquivo `teste-collection.postman_collection`.
 
@@ -145,7 +178,7 @@ Você pode agora testar o fluxo completo:
 
 -----
 
-## 6\. Endpoints da API
+## 7\. Endpoints da API
 
 | Método   | Endpoint                          | Proteção      | Descrição                                                   |
 |:---------|:----------------------------------|:--------------|:------------------------------------------------------------|
