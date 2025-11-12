@@ -1,0 +1,652 @@
+{
+	"info": {
+		"_postman_id": "adcaaed5-e4f1-4d27-b40b-c9b781f9c839",
+		"name": "teste tecnico: sistema de gerenciamento de pedidos e produtos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40447894"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Salvar token de autenticação\", function() {\r",
+									"    // 1. Garante que a requisição foi bem-sucedida (HTTP 200)\r",
+									"    pm.response.to.have.status(200);\r",
+									"    \r",
+									"    // 2. Parseia o corpo da resposta JSON\r",
+									"    var responseBody = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseBody).to.have.property(\"token\");\r",
+									"    var token = responseBody.token;\r",
+									"    pm.collectionVariables.set(\"jwt_token\", token);\r",
+									"\r",
+									"\r",
+									"    pm.expect(responseBody).to.have.property(\"id\");\r",
+									"    var id_ultimo_usuario_criado = responseBody.id;\r",
+									"    pm.collectionVariables.set(\"id_ultimo_usuario_criado\", id_ultimo_usuario_criado);\r",
+									"\r",
+									"    \r",
+									"\r",
+									"\r",
+									"\r",
+									"    console.log(\"Token JWT salvo na variável 'jwt_token'\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"vitorhugo.dev1997@gmail.com\",\r\n    \"password\": 40028922,\r\n    \"name\": \"usuario admin para testes\",\r\n    \"role\":\"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localBaseURL}}/auth/register",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Salvar token de autenticação\", function() {\r",
+									"    // 1. Garante que a requisição foi bem-sucedida (HTTP 200)\r",
+									"    pm.response.to.have.status(200);\r",
+									"    \r",
+									"    // 2. Parseia o corpo da resposta JSON\r",
+									"    var responseBody = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseBody).to.have.property(\"token\");\r",
+									"    var token = responseBody.token;\r",
+									"    pm.collectionVariables.set(\"jwt_token\", token);\r",
+									"\r",
+									"\r",
+									"    pm.expect(responseBody).to.have.property(\"id\");\r",
+									"    var id_ultimo_usuario_criado = responseBody.id;\r",
+									"    pm.collectionVariables.set(\"id_ultimo_usuario_criado\", id_ultimo_usuario_criado);\r",
+									"\r",
+									"    \r",
+									"    console.log(\"Token JWT salvo na variável 'jwt_token'\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": 40028922\r\n}\r\n// {\r\n//     \"email\": \"user@gmail.com\",\r\n//     \"password\": 40028922\r\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localBaseURL}}/auth/login",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "list all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Salvar token de autenticação\", function() {\r",
+									"    // 1. Garante que a requisição foi bem-sucedida (HTTP 200)\r",
+									"    pm.response.to.have.status(200);\r",
+									"    \r",
+									"    // 2. Parseia o corpo da resposta JSON\r",
+									"    var responseBody = pm.response.json();\r",
+									"    \r",
+									"    // 3. Verifica se a propriedade \"token\" existe na resposta\r",
+									"    pm.expect(responseBody).to.have.property(\"token\");\r",
+									"    \r",
+									"    // 4. Pega o valor do token\r",
+									"    var token = responseBody.token;\r",
+									"    \r",
+									"    // 5. Salva o token em uma variável de Coleção\r",
+									"    // (Melhor que Global, pois fica só para esta API)\r",
+									"    pm.collectionVariables.set(\"jwt_token\", token);\r",
+									"\r",
+									"    console.log(\"Token JWT salvo na variável 'jwt_token'\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": 40028922,\r\n    \"name\": \"Usuario Admin\",\r\n    \"role\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localBaseURL}}/api/v1/users/list-all",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"list-all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Salvar token de autenticação\", function() {\r",
+									"    // 1. Garante que a requisição foi bem-sucedida (HTTP 200)\r",
+									"    pm.response.to.have.status(200);\r",
+									"    \r",
+									"    // 2. Parseia o corpo da resposta JSON\r",
+									"    var responseBody = pm.response.json();\r",
+									"    \r",
+									"    // 3. Verifica se a propriedade \"token\" existe na resposta\r",
+									"    pm.expect(responseBody).to.have.property(\"token\");\r",
+									"    \r",
+									"    // 4. Pega o valor do token\r",
+									"    var token = responseBody.token;\r",
+									"    \r",
+									"    // 5. Salva o token em uma variável de Coleção\r",
+									"    // (Melhor que Global, pois fica só para esta API)\r",
+									"    pm.collectionVariables.set(\"jwt_token\", token);\r",
+									"\r",
+									"    console.log(\"Token JWT salvo na variável 'jwt_token'\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": 40028922,\r\n    \"name\": \"Usuario Admin\",\r\n    \"role\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localBaseURL}}/api/v1/users/{{id_ultimo_usuario_criado}}",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{id_ultimo_usuario_criado}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "create product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"salvar id do produto criado\", function() {\r",
+									"    // 1. Garante que a requisição foi bem-sucedida (HTTP 200)\r",
+									"    pm.response.to.have.status(201);\r",
+									"    \r",
+									"    // 2. Parseia o corpo da resposta JSON\r",
+									"    var responseBody = pm.response.json();\r",
+									"\r",
+									"\r",
+									"    pm.expect(responseBody).to.have.property(\"id\");\r",
+									"    var id_ultimo_produto_criado = responseBody.id;\r",
+									"    pm.collectionVariables.set(\"id_ultimo_produto_criado\", id_ultimo_produto_criado);\r",
+									"\r",
+									"    console.log(\"Token JWT salvo na variável 'jwt_token'\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"feijão (1kg)\",\r\n  \"price\": 80.90,\r\n  \"category\": \"Alimentos\",\r\n  \"stock\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localBaseURL}}/api/v1/products",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"salvar id do produto criado\", function() {\r",
+									"    // 1. Garante que a requisição foi bem-sucedida (HTTP 200)\r",
+									"    pm.response.to.have.status(201);\r",
+									"    \r",
+									"    // 2. Parseia o corpo da resposta JSON\r",
+									"    var responseBody = pm.response.json();\r",
+									"\r",
+									"\r",
+									"    pm.expect(responseBody).to.have.property(\"id\");\r",
+									"    var id_ultimo_produto_criado = responseBody.id;\r",
+									"    pm.collectionVariables.set(\"id_ultimo_produto_criado\", id_ultimo_produto_criado);\r",
+									"\r",
+									"    console.log(\"Token JWT salvo na variável 'jwt_token'\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"feijão (1kg)\",\r\n    \"price\": 8.90,\r\n    \"category\": \"Alimentos\",\r\n    \"stock\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localBaseURL}}/api/v1/products/{{id_ultimo_produto_criado}}",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"{{id_ultimo_produto_criado}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"salvar id do produto criado\", function() {\r",
+									"    // 1. Garante que a requisição foi bem-sucedida (HTTP 200)\r",
+									"    pm.response.to.have.status(201);\r",
+									"    \r",
+									"    // 2. Parseia o corpo da resposta JSON\r",
+									"    var responseBody = pm.response.json();\r",
+									"\r",
+									"\r",
+									"    pm.expect(responseBody).to.have.property(\"id\");\r",
+									"    var id_ultimo_produto_criado = responseBody.id;\r",
+									"    pm.collectionVariables.set(\"id_ultimo_produto_criado\", id_ultimo_produto_criado);\r",
+									"\r",
+									"    console.log(\"Token JWT salvo na variável 'jwt_token'\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{localBaseURL}}/api/v1/products/{{id_ultimo_produto_criado}}",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"{{id_ultimo_produto_criado}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find product by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{localBaseURL}}/api/v1/products/{{id_ultimo_produto_criado}}",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"{{id_ultimo_produto_criado}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{localBaseURL}}/api/v1/products?inStock=true",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							],
+							"query": [
+								{
+									"key": "inStock",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "create order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"salvar id do pedido criado\", function() {\r",
+									"    // 1. Garante que a requisição foi bem-sucedida (HTTP 200)\r",
+									"    pm.response.to.have.status(201);\r",
+									"    \r",
+									"    // 2. Parseia o corpo da resposta JSON\r",
+									"    var responseBody = pm.response.json();\r",
+									"\r",
+									"\r",
+									"    pm.expect(responseBody).to.have.property(\"id\");\r",
+									"    var id_ultimo_pedido_criado = responseBody.id;\r",
+									"    pm.collectionVariables.set(\"id_ultimo_pedido_criado\", id_ultimo_pedido_criado);\r",
+									"\r",
+									"    console.log(\"Token JWT salvo na variável 'jwt_token'\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"productId\": \"36f30f73-052e-4490-bb1c-0230ab14835d\",\r\n      \"quantity\": 2.5\r\n    },\r\n    {\r\n      \"productId\": \"903f2ed5-f1a5-499b-848a-98c2e1531172\",\r\n      \"quantity\": 5\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localBaseURL}}/api/v1/orders",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get orders by current user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"salvar id do pedido criado\", function() {\r",
+									"    // 1. Garante que a requisição foi bem-sucedida (HTTP 200)\r",
+									"    pm.response.to.have.status(201);\r",
+									"    \r",
+									"    // 2. Parseia o corpo da resposta JSON\r",
+									"    var responseBody = pm.response.json();\r",
+									"\r",
+									"\r",
+									"    pm.expect(responseBody).to.have.property(\"id\");\r",
+									"    var id_ultimo_pedido_criado = responseBody.id;\r",
+									"    pm.collectionVariables.set(\"id_ultimo_pedido_criado\", id_ultimo_pedido_criado);\r",
+									"\r",
+									"    console.log(\"Token JWT salvo na variável 'jwt_token'\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{localBaseURL}}/api/v1/orders",
+							"host": [
+								"{{localBaseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "reports",
+			"item": []
+		}
+	],
+	"variable": [
+		{
+			"key": "localBaseURL",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "jwt_token",
+			"value": ""
+		},
+		{
+			"key": "id_ultimo_usuario_criado",
+			"value": ""
+		},
+		{
+			"key": "id_ultimo_produto_criado",
+			"value": ""
+		},
+		{
+			"key": "id_ultimo_pedido_criado",
+			"value": ""
+		}
+	]
+}
