@@ -28,7 +28,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ecommerce_db?allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: "springuser"
       SPRING_DATASOURCE_PASSWORD: "password"
-      JWT_SECRET: bXlWZXJ5U2VjdXJlU2VjdXJlS2V5Rm9ySldUU2lnbmluZ1RoYXRJc0xvbmc=
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
       db:
         condition: service_healthy
