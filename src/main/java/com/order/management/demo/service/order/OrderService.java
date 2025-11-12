@@ -184,9 +184,10 @@ public class OrderService {
                 .map(item -> OrderItemResponseDTO.builder()
                         .productId(item.getProduct().getId())
                         .productName(item.getProduct().getName())
-                        .quantity(item.getQuantity())
+                        .quantity(item.getQuantity().setScale(1, RoundingMode.HALF_UP))
                         .priceAtPurchase(item.getPriceAtPurchase())
-                        .subtotal(item.getPriceAtPurchase().multiply(item.getQuantity()))
+                        .subtotal(item.getPriceAtPurchase().multiply(item.getQuantity())
+                                .setScale(2, RoundingMode.HALF_UP))
                         .build())
                 .collect(Collectors.toList());
 
